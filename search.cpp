@@ -1,53 +1,71 @@
 #include <iostream>
 using namespace std;
 
-// ===== Helper Function =====
-void performSearch(int arr[], int size, int target,
-                   int (*searchFunc)(int[], int, int)) {
-
-    int result = searchFunc(arr, size, target);
-
-    if (result != -1)
-        cout << "Element " << target << " found at index " << result << "\n\n";
-    else
-        cout << "Element " << target << " not found.\n\n";
-}
-
 // ===== Binary Search Function =====
 int binarySearch(int arr[], int size, int target) {
     int left = 0, right = size - 1;
+    int step = 1;
+
+    cout << "\n===== Binary Search Visualization =====\n";
 
     while (left <= right) {
         int mid = left + (right - left) / 2;
 
-        if (arr[mid] == target)
+        // Show current state
+        cout << "\nStep " << step++ << ": ";
+        cout << "Left = " << left << ", Right = " << right
+             << ", Mid = " << mid << "\n";
+
+        cout << "Array: ";
+        for (int i = 0; i < size; i++) {
+            if (i == mid)
+                cout << "[" << arr[i] << "] "; // highlight mid
+            else
+                cout << arr[i] << " ";
+        }
+        cout << "\n";
+
+        if (arr[mid] == target) {
+            cout << "Found target " << target << " at index " << mid << "!\n";
             return mid;
-        else if (arr[mid] < target)
+        }
+        else if (arr[mid] < target) {
+            cout << "Target is greater than " << arr[mid] << ", moving RIGHT\n";
             left = mid + 1;
-        else
+        }
+        else {
+            cout << "Target is smaller than " << arr[mid] << ", moving LEFT\n";
             right = mid - 1;
+        }
     }
+
+    cout << "Target not found.\n";
     return -1;
 }
 
-// ===== iterative Sequential Search Function =====
+// ===== Iterative Sequential Search Function =====
 int sequentialSearch(int arr[], int size, int target) {
+    cout << "\n===== Sequential Search Visualization =====\n";
+
     for (int i = 0; i < size; i++) {
         if (arr[i] == target) {
-            return i;  // Target found, return its index
+            cout << " --> Found target " << target << " at index " << i << "!\n";
+            return i;
         }
     }
-    return -1;  // Target not found
+
+    cout << "Target not found.\n";
+    return -1;
 }
 
-// ===== Recursive function for sequential search =====
+// ===== Recursive Sequential Search Function =====
 int recursiveSequentialSearch(int arr[], int size, int index, int target) {
-    cout << "Checking index " << index << "..." << endl;
-
     if (index == size) {
         cout << "Reached end of array. Target not found.\n";
         return -1;
     }
+
+    cout << "Checking index " << index << ": value = " << arr[index] << endl;
 
     if (arr[index] == target) {
         cout << "Found target " << target << " at index " << index << "!\n";
@@ -55,14 +73,18 @@ int recursiveSequentialSearch(int arr[], int size, int index, int target) {
     }
 
     cout << "Value " << arr[index] << " != " << target
-         << " → moving to index " << index + 1 << endl;
+         << " --> Moving to index " << index + 1 << "\n";
 
     return recursiveSequentialSearch(arr, size, index + 1, target);
 }
 
-// ===== Wrapper for performSearch compatibility =====
+// ===== Wrapper for Recursive Sequential Search =====
 int sequentialSearchWrapper(int arr[], int size, int target) {
-    return recursiveSequentialSearch(arr, size, 0, target);
+    cout << "\n===== Recursive Sequential Search Visualization =====\n";
+    int result = recursiveSequentialSearch(arr, size, 0, target);
+    if (result == -1)
+        cout << "Target not found.\n";
+    return result;
 }
 
 // ===== Main Function =====
@@ -71,25 +93,19 @@ int main() {
     int size = sizeof(arr) / sizeof(arr[0]);
     int target;
 
-    cout << "array : ";
-    for(int x : arr){
-        cout << x << " ";
-    }
-    cout << endl;
-
-    cout << "Enter a number to search: ";
+    cout << "Array: ";
+    for (int x : arr) cout << x << " ";
+    cout << "\nEnter a number to search: ";
     cin >> target;
-    cout << "-------------------------------------------\n";
 
-    cout << "Binary Search result: ";
-    performSearch(arr, size, target, binarySearch);
-    cout << "-------------------------------------------\n";
+    cout << "\n-------------------------------------------\n";
+    binarySearch(arr, size, target);
 
-    cout << "Recursive Sequential Search: ";
-    performSearch(arr, size, target, sequentialSearchWrapper);
     cout << "-------------------------------------------\n";
+    sequentialSearch(arr, size, target);
 
-    cout << "Iterative Sequential Search result: ";
-    performSearch(arr, size, target, sequentialSearch);
+    cout << "-------------------------------------------\n";
+    sequentialSearchWrapper(arr, size, target);
+
     cout << "-------------------------------------------\n";
 }
