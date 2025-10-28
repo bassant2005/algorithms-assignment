@@ -30,15 +30,52 @@ int binarySearch(int arr[], int size, int target) {
     return -1;
 }
 
+// ===== Recursive function for sequential search =====
+int recursiveSequentialSearch(int arr[], int size, int index, int target) {
+    cout << "Checking index " << index << "..." << endl;
+
+    if (index == size) {
+        cout << "Reached end of array. Target not found.\n";
+        return -1;
+    }
+
+    if (arr[index] == target) {
+        cout << "Found target " << target << " at index " << index << "!\n";
+        return index;
+    }
+
+    cout << "Value " << arr[index] << " != " << target
+         << " → moving to index " << index + 1 << endl;
+
+    return recursiveSequentialSearch(arr, size, index + 1, target);
+}
+
+// ===== Wrapper for performSearch compatibility =====
+int sequentialSearchWrapper(int arr[], int size, int target) {
+    return recursiveSequentialSearch(arr, size, 0, target);
+}
+
 // ===== Main Function =====
 int main() {
     int arr[] = {2, 4, 6, 8, 10, 12, 14};
     int size = sizeof(arr) / sizeof(arr[0]);
     int target;
 
+    cout << "array : ";
+    for(int x : arr){
+        cout << x << " ";
+    }
+    cout << endl;
+
     cout << "Enter a number to search: ";
     cin >> target;
+    cout << "-------------------------------------------\n";
 
     cout << "Binary Search result: ";
     performSearch(arr, size, target, binarySearch);
+    cout << "-------------------------------------------\n";
+
+    cout << "Recursive Sequential Search: ";
+    performSearch(arr, size, target, sequentialSearchWrapper);
+    cout << "-------------------------------------------\n";
 }
