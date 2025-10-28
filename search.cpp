@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 using namespace std;
 
 // ===== Helper Function =====
@@ -30,6 +31,16 @@ int binarySearch(int arr[], int size, int target) {
     return -1;
 }
 
+// ===== iterative Sequential Search Function =====
+int sequentialSearch(int arr[], int size, int target) {
+    for (int i = 0; i < size; i++) {
+        if (arr[i] == target) {
+            return i;  // Target found, return its index
+        }
+    }
+    return -1;  // Target not found
+}
+
 // ===== Main Function =====
 int main() {
     int arr[] = {2, 4, 6, 8, 10, 12, 14};
@@ -41,4 +52,7 @@ int main() {
 
     cout << "Binary Search result: ";
     performSearch(arr, size, target, binarySearch);
+
+    cout << "iterative Sequential Search result: ";
+    performSearch(arr, size, target, sequentialSearch);
 }
