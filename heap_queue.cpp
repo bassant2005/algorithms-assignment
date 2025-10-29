@@ -151,6 +151,75 @@ public:
     }
 };
 
+// ===== PRIORITY QUEUE (using MaxHeap) =====
+class PriorityQueue {
+private:
+    struct Element {
+        int value;
+        int priority;
+    };
+    vector<Element> pq;
+
+    // Maintain heap property (bottom-up)
+    void heapifyUp(int i) {
+        int parent = (i - 1) / 2;
+        if (i > 0 && pq[i].priority > pq[parent].priority) {
+            swap(pq[i], pq[parent]);
+            heapifyUp(parent);
+        }
+    }
+
+    // Maintain heap property (top-down)
+    void heapifyDown(int i) {
+        int left = 2 * i + 1;
+        int right = 2 * i + 2;
+        int largest = i;
+
+        if (left < pq.size() && pq[left].priority > pq[largest].priority)
+            largest = left;
+        if (right < pq.size() && pq[right].priority > pq[largest].priority)
+            largest = right;
+
+        if (largest != i) {
+            swap(pq[i], pq[largest]);
+            heapifyDown(largest);
+        }
+    }
+    // === PRIORITY QUEUE METHODS ===
+public:
+    // Insert element with a priority
+    void insert(int value, int priority) {
+        pq.push_back({value, priority});
+        heapifyUp(pq.size() - 1);
+        cout << "Inserted value " << value << " with priority " << priority << ".\n";
+    }
+
+    // Extract element with the highest priority
+    int extractHighestPriority() {
+        if (pq.empty()) {
+            cout << "Priority Queue is empty!\n";
+            return -1;
+        }
+        int highestVal = pq[0].value;
+        cout << "Extracted element with highest priority: " << highestVal << "\n";
+        pq[0] = pq.back();
+        pq.pop_back();
+        heapifyDown(0);
+        return highestVal;
+    }
+
+    bool isEmpty() {
+        return pq.empty();
+    }
+
+    void display() {
+        cout << "\n===== PRIORITY QUEUE =====\n";
+        for (auto &e : pq)
+            cout << "[Value: " << e.value << ", Priority: " << e.priority << "]\n";
+        cout << "==========================\n";
+    }
+};
+
 // ===== HEAP SORT using the same heapifyDown =====
 void heapSort() {
     vector<int> arr;
@@ -187,17 +256,21 @@ void heapSort() {
 // =====  MENU FUNCTION =====
 void runHeapMenu() {
     MaxHeap h;
-    int choice, val;
+    PriorityQueue pq;
+    int choice, val, priority;
 
     while (true) {
-        cout << "\n=== MAX HEAP MENU ===\n";
-        cout << "1. Insert element\n";
-        cout << "2. Get maximum\n";
-        cout << "3. Extract maximum\n";
-        cout << "4. Extract minimum\n";
+        cout << "\n=== HEAP & PRIORITY QUEUE MENU ===\n";
+        cout << "1. Insert element (Heap)\n";
+        cout << "2. Get maximum (Heap)\n";
+        cout << "3. Extract maximum (Heap)\n";
+        cout << "4. Extract minimum (Heap)\n";
         cout << "5. Display heap\n";
         cout << "6. Heap Sort\n";
-        cout << "7. Exit\n";
+        cout << "7. Insert element with priority (PQ)\n";
+        cout << "8. Extract highest priority (PQ)\n";
+        cout << "9. Display Priority Queue\n";
+        cout << "10. Exit\n";
         cout << "Enter your choice: ";
         cin >> choice;
 
@@ -227,12 +300,27 @@ void runHeapMenu() {
                 h.display();
                 break;
 
-            case 6: {
+            case 6:
                 heapSort();
                 break;
-            }
 
             case 7:
+                cout << "Enter value: ";
+                cin >> val;
+                cout << "Enter priority: ";
+                cin >> priority;
+                pq.insert(val, priority);
+                break;
+
+            case 8:
+                pq.extractHighestPriority();
+                break;
+
+            case 9:
+                pq.display();
+                break;
+
+            case 10:
                 cout << "Exiting program... Goodbye!\n";
                 return; // ✅ clean exit
 
