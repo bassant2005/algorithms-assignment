@@ -1,7 +1,7 @@
 #include <iostream>
 using namespace std;
 
-// ===== Binary Search Function =====
+// ===== Iterative Binary Search Function =====
 int binarySearch(int arr[], int size, int target) {
     int left = 0, right = size - 1;
     int step = 1;
@@ -10,7 +10,6 @@ int binarySearch(int arr[], int size, int target) {
 
     while (left <= right) {
         int mid = left + (right - left) / 2;
-
         // Show current state
         cout << "\nStep " << step++ << ": ";
         cout << "Left = " << left << ", Right = " << right
@@ -100,6 +99,38 @@ int sequentialSearchWrapper(int arr[], int size, int target) {
     return result;
 }
 
+// ===== Recursive Binary Search Function =====
+int recursiveBinarySearch(int arr[], int low, int high, int target) {
+    if (low > high) {
+        cout << "Target not found in this range.\n";
+        return -1;
+    }
+
+    int mid = low + (high - low) / 2;
+
+    cout << "Checking middle index " << mid << " (value = " << arr[mid] << ")\n";
+
+    if (arr[mid] == target) {
+        cout << "Found target " << target << " at index " << mid << "!\n";
+        return mid;
+    } else if (arr[mid] > target) {
+        cout << "Target is smaller than " << arr[mid] << " --> Searching LEFT half\n";
+        return recursiveBinarySearch(arr, low, mid - 1, target);
+    } else {
+        cout << "Target is greater than " << arr[mid] << " --> Searching RIGHT half\n";
+        return recursiveBinarySearch(arr, mid + 1, high, target);
+    }
+}
+
+// ===== Wrapper for Recursive Binary Search =====
+int binarySearchWrapper(int arr[], int size, int target) {
+    cout << "\n===== Recursive Binary Search Visualization =====\n";
+    int result = recursiveBinarySearch(arr, 0, size - 1, target);
+    if (result == -1)
+        cout << "Target not found.\n";
+    return result;
+}
+
 // ===== Main Function =====
 int main() {
     int arr[] = {2, 4, 6, 8, 10, 12, 14};
@@ -119,6 +150,9 @@ int main() {
 
     cout << "-------------------------------------------\n";
     sequentialSearchWrapper(arr, size, target);
+
+    cout << "-------------------------------------------\n";
+    binarySearchWrapper(arr, size, target);
 
     cout << "-------------------------------------------\n";
 }
