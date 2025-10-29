@@ -46,15 +46,28 @@ int binarySearch(int arr[], int size, int target) {
 // ===== Iterative Sequential Search Function =====
 int sequentialSearch(int arr[], int size, int target) {
     cout << "\n===== Sequential Search Visualization =====\n";
+    int step = 1;
 
     for (int i = 0; i < size; i++) {
+        cout << "\nStep " << step++ << ": Checking index " << i << endl;
+        cout << "Array: ";
+        for (int j = 0; j < size; j++) {
+            if (j == i)
+                cout << "[" << arr[j] << "] "; // highlight current element
+            else
+                cout << arr[j] << " ";
+        }
+        cout << "\n";
+
         if (arr[i] == target) {
-            cout << " --> Found target " << target << " at index " << i << "!\n";
+            cout << " Found target " << target << " at index " << i << "!\n";
             return i;
+        } else {
+            cout << " " << arr[i] << " != " << target << " --> Moving to next element\n";
         }
     }
 
-    cout << "Target not found.\n";
+    cout << "\nReached end of array. Target not found.\n";
     return -1;
 }
 
