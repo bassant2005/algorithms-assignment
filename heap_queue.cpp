@@ -4,9 +4,10 @@
 using namespace std;
 
 //===== MaxHeap =====
+template<typename T>
 class MaxHeap {
 private:
-    vector<int> heap;
+    vector<T> heap;
 
     // Maintain heap property (bottom-up)
     void heapifyUp(int i) {
@@ -36,28 +37,29 @@ private:
 
 public:
     // Insert an element
-    void insert(int val) {
+    void insert(T val, bool showMsg = true) {
         heap.push_back(val);
         heapifyUp(heap.size() - 1);
-        cout << val << " inserted into the heap.\n";
+        if (showMsg)
+            cout << val << " inserted into the heap.\n";
     }
 
     // Get maximum element
-    int getMax() {
+    T getMax() {
         if (heap.empty()) {
             cout << "Heap is empty!\n";
-            return -1;
+            return T();
         }
         return heap[0];
     }
 
     // Extract (remove) maximum element
-    int extractMax() {
+    T extractMax() {
         if (heap.empty()) {
             cout << "Heap is empty!\n";
-            return -1;
+            return T();
         }
-        int maxVal = heap[0];
+        T maxVal = heap[0];
         heap[0] = heap.back();
         heap.pop_back();
         heapifyDown(0);
@@ -66,10 +68,10 @@ public:
     }
 
     // Extract (remove) minimum element
-    int extractMin() {
+    T extractMin() {
         if (heap.empty()) {
             cout << "Heap is empty.\n";
-            return -1;
+            return T();
         }
 
         int minIndex = heap.size() / 2;
@@ -78,7 +80,7 @@ public:
                 minIndex = i;
         }
 
-        int minVal = heap[minIndex];
+        T minVal = heap[minIndex];
         cout << "Extracted min: " << minVal << endl;
 
         heap[minIndex] = heap.back();
@@ -90,6 +92,11 @@ public:
         }
 
         return minVal;
+    }
+
+    // Check if heap is empty
+    bool isEmpty() {
+        return heap.empty();
     }
 
     // Display heap as a structured binary tree (well-aligned)
@@ -144,10 +151,32 @@ public:
 
         cout << "\n================================================================================\n";
     }
+};
 
-    // Check if heap is empty
-    bool isEmpty() {
-        return heap.empty();
+//===== Priority Queue Element =====
+struct PQElement {
+    int value;
+    int priority;
+
+    // Constructor
+    PQElement(int v = 0, int p = 0) {
+        value = v;
+        priority = p;
+    }
+    // Overload > operator for heap comparisons
+    bool operator>(const PQElement& other) const {
+        return priority > other.priority;
+    }
+
+    // Overload < operator for min extraction
+    bool operator<(const PQElement& other) const {
+        return priority < other.priority;
+    }
+
+    // Overload << for printing
+    friend ostream& operator<<(ostream& os, const PQElement& elem) {
+        os << elem.value << "(" << elem.priority << ")";
+        return os;
     }
 };
 
@@ -155,7 +184,7 @@ public:
 void heapSort() {
     vector<int> arr;
     int val = 0;
-    MaxHeap heap;
+    MaxHeap<int> heap;
 
     cout << "Enter elements(when you are done enter -1): ";
     while (true){
@@ -184,74 +213,39 @@ void heapSort() {
     cout << endl;
 }
 
-// ===== PRIORITY QUEUE (using MaxHeap) =====
+// ===== PRIORITY QUEUE =====
 class PriorityQueue {
 private:
-    struct Element {
-        int value;
-        int priority;
-    };
-    vector<Element> pq;
+    MaxHeap<PQElement> heap;
 
-    // Maintain heap property (bottom-up)
-    void heapifyUp(int i) {
-        int parent = (i - 1) / 2;
-        if (i > 0 && pq[i].priority > pq[parent].priority) {
-            swap(pq[i], pq[parent]);
-            heapifyUp(parent);
-        }
-    }
-
-    // Maintain heap property (top-down)
-    void heapifyDown(int i) {
-        int left = 2 * i + 1;
-        int right = 2 * i + 2;
-        int largest = i;
-
-        if (left < pq.size() && pq[left].priority > pq[largest].priority)
-            largest = left;
-        if (right < pq.size() && pq[right].priority > pq[largest].priority)
-            largest = right;
-
-        if (largest != i) {
-            swap(pq[i], pq[largest]);
-            heapifyDown(largest);
-        }
-    }
-    // === PRIORITY QUEUE METHODS ===
 public:
-    // Insert element with a priority
+    // Insert element with priority
     void insert(int value, int priority) {
-        pq.push_back({value, priority});
-        heapifyUp(pq.size() - 1);
+        PQElement elem(value, priority);
+        heap.insert(elem, false);
         cout << "Inserted value " << value << " with priority " << priority << ".\n";
     }
 
-    // Extract element with the highest priority
+
+    // Extract the highest priority element
     int extractHighestPriority() {
-        if (pq.empty()) {
-            cout << "Priority Queue is empty!\n";
-            return -1;
-        }
-        int highestVal = pq[0].value;
-        cout << "Extracted element with highest priority: " << highestVal << "\n";
-        pq[0] = pq.back();
-        pq.pop_back();
-        heapifyDown(0);
-        return highestVal;
+        PQElement elem = heap.extractMax();
+        cout << "Extracted value " << elem.value << " with priority " << elem.priority << "\n";
+        return elem.value;
     }
 
     void display() {
-        cout << "\n===== PRIORITY QUEUE =====\n";
-        for (auto &e : pq)
-            cout << "[Value: " << e.value << ", Priority: " << e.priority << "]\n";
-        cout << "==========================\n";
+        heap.display();
+    }
+
+    bool isEmpty() {
+        return heap.isEmpty();
     }
 };
 
 // =====  MENU FUNCTION =====
 void runHeapMenu() {
-    MaxHeap h;
+    MaxHeap<int> h;
     PriorityQueue pq;
     int choice, val, priority;
 
