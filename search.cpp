@@ -42,6 +42,38 @@ int binarySearch(int arr[], int size, int target) {
     return -1;
 }
 
+// ===== Recursive Binary Search Function =====
+int recursiveBinarySearch(int arr[], int low, int high, int target) {
+    if (low > high) {
+        cout << "Target not found in this range.\n";
+        return -1;
+    }
+
+    int mid = low + (high - low) / 2;
+
+    cout << "Checking middle index " << mid << " (value = " << arr[mid] << ")\n";
+
+    if (arr[mid] == target) {
+        cout << "Found target " << target << " at index " << mid << "!\n";
+        return mid;
+    } else if (arr[mid] > target) {
+        cout << "Target is smaller than " << arr[mid] << " --> Searching LEFT half\n";
+        return recursiveBinarySearch(arr, low, mid - 1, target);
+    } else {
+        cout << "Target is greater than " << arr[mid] << " --> Searching RIGHT half\n";
+        return recursiveBinarySearch(arr, mid + 1, high, target);
+    }
+}
+
+// ===== Wrapper for Recursive Binary Search =====
+int binarySearchWrapper(int arr[], int size, int target) {
+    cout << "\n===== Recursive Binary Search Visualization =====\n";
+    int result = recursiveBinarySearch(arr, 0, size - 1, target);
+    if (result == -1)
+        cout << "Target not found.\n";
+    return result;
+}
+
 // ===== Iterative Sequential Search Function =====
 int sequentialSearch(int arr[], int size, int target) {
     cout << "\n===== Sequential Search Visualization =====\n";
@@ -99,38 +131,6 @@ int sequentialSearchWrapper(int arr[], int size, int target) {
     return result;
 }
 
-// ===== Recursive Binary Search Function =====
-int recursiveBinarySearch(int arr[], int low, int high, int target) {
-    if (low > high) {
-        cout << "Target not found in this range.\n";
-        return -1;
-    }
-
-    int mid = low + (high - low) / 2;
-
-    cout << "Checking middle index " << mid << " (value = " << arr[mid] << ")\n";
-
-    if (arr[mid] == target) {
-        cout << "Found target " << target << " at index " << mid << "!\n";
-        return mid;
-    } else if (arr[mid] > target) {
-        cout << "Target is smaller than " << arr[mid] << " --> Searching LEFT half\n";
-        return recursiveBinarySearch(arr, low, mid - 1, target);
-    } else {
-        cout << "Target is greater than " << arr[mid] << " --> Searching RIGHT half\n";
-        return recursiveBinarySearch(arr, mid + 1, high, target);
-    }
-}
-
-// ===== Wrapper for Recursive Binary Search =====
-int binarySearchWrapper(int arr[], int size, int target) {
-    cout << "\n===== Recursive Binary Search Visualization =====\n";
-    int result = recursiveBinarySearch(arr, 0, size - 1, target);
-    if (result == -1)
-        cout << "Target not found.\n";
-    return result;
-}
-
 // ===== Main Function =====
 int main() {
     int arr[] = {2, 4, 6, 8, 10, 12, 14};
@@ -146,13 +146,13 @@ int main() {
     binarySearch(arr, size, target);
 
     cout << "-------------------------------------------\n";
+    binarySearchWrapper(arr, size, target);
+
+    cout << "-------------------------------------------\n";
     sequentialSearch(arr, size, target);
 
     cout << "-------------------------------------------\n";
     sequentialSearchWrapper(arr, size, target);
-
-    cout << "-------------------------------------------\n";
-    binarySearchWrapper(arr, size, target);
 
     cout << "-------------------------------------------\n";
 }

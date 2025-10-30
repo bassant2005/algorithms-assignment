@@ -86,6 +86,4 @@ int main() {
     cout << "Fibonacci Series (Matrix / Divide & Conquer): ";
     PrintFibonacciSeries(n, MatrixFibonacci);
     cout << "Fibonacci(" << n << ") = " << MatrixFibonacci(n) << endl;
-
-    return 0;
 }

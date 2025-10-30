@@ -151,6 +151,39 @@ public:
     }
 };
 
+// ===== HEAP SORT using the same heapifyDown =====
+void heapSort() {
+    vector<int> arr;
+    int val = 0;
+    MaxHeap heap;
+
+    cout << "Enter elements(when you are done enter -1): ";
+    while (true){
+        cin >> val;
+        if(val == -1) break;
+        arr.push_back(val);
+    }
+    cout << endl;
+
+    // Step 1: Insert all elements into the heap
+    for (int val : arr) {
+        heap.insert(val);
+    }
+    cout << endl;
+
+    // Step 2: Extract max repeatedly to build a sorted array (ascending)
+    for (int i = arr.size() - 1; i >= 0; i--) {
+        arr[i] = heap.extractMax();  // Extract max each time
+    }
+    cout << endl;
+
+    cout << "Sorted array: ";
+    for (int x : arr)
+        cout << x << " ";
+
+    cout << endl;
+}
+
 // ===== PRIORITY QUEUE (using MaxHeap) =====
 class PriorityQueue {
 private:
@@ -208,10 +241,6 @@ public:
         return highestVal;
     }
 
-    bool isEmpty() {
-        return pq.empty();
-    }
-
     void display() {
         cout << "\n===== PRIORITY QUEUE =====\n";
         for (auto &e : pq)
@@ -219,39 +248,6 @@ public:
         cout << "==========================\n";
     }
 };
-
-// ===== HEAP SORT using the same heapifyDown =====
-void heapSort() {
-    vector<int> arr;
-    int val = 0;
-    MaxHeap heap;
-
-    cout << "Enter elements(when you are done enter -1): ";
-    while (true){
-        cin >> val;
-        if(val == -1) break;
-        arr.push_back(val);
-    }
-    cout << endl;
-
-    // Step 1: Insert all elements into the heap
-    for (int val : arr) {
-        heap.insert(val);
-    }
-    cout << endl;
-
-    // Step 2: Extract max repeatedly to build a sorted array (ascending)
-    for (int i = arr.size() - 1; i >= 0; i--) {
-        arr[i] = heap.extractMax();  // Extract max each time
-    }
-    cout << endl;
-
-    cout << "Sorted array: ";
-    for (int x : arr)
-        cout << x << " ";
-
-    cout << endl;
-}
 
 // =====  MENU FUNCTION =====
 void runHeapMenu() {
